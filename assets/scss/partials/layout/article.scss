@@ -47,7 +47,10 @@
             img.inline-image {
                 min-height: 1.5em;
                 width: auto;
+                max-width: 100%;
                 vertical-align: text-bottom;
+                aspect-ratio: attr(width) / attr(height);
+                object-fit: contain;
             }
         }
 
