@@ -32,6 +32,9 @@
                 onloadElements.forEach(onloadElement => {
                     const script = document.createElement("script");
                     script.textContent = onloadElement.textContent;
+                    if (onloadElement.src) script.src = onloadElement.src;
+                    if (onloadElement.integrity) script.integrity = onloadElement.integrity;
+                    if (onloadElement.crossOrigin) script.crossOrigin = onloadElement.crossOrigin;
                     template.parentElement.appendChild(script);
                 });
             });
