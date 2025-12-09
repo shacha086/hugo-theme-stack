@@ -28,7 +28,7 @@
                     return;
                 }
                 
-                // To execute scripts inside non-declarative shadow DOM, we need to move them to light DOM
+                // To execute scripts inside non-declarative shadow DOM, we need to move them to real DOM
                 onloadElements.forEach(onloadElement => {
                     const script = document.createElement("script");
                     script.textContent = onloadElement.textContent;
