@@ -23,7 +23,7 @@
             templates.forEach(template => {
                 const shadow = template.parentElement.attachShadow({ mode: 'open' });
                 shadow.innerHTML = template.innerHTML;
-                const onloadElements = shadow.querySelectorAll("script.onload");
+                const onloadElements = shadow.querySelectorAll("script");
                 if (!onloadElements) {
                     return;
                 }
