@@ -1,5 +1,29 @@
 {{ define "body-class" }}template-friends{{ end }}
 {{ define "main" }}
+<script>
+    const cardHosts = [];
+    function registerShadow() {
+        const host = document.currentScript.parentElement;
+        const root = {};
+        Object.defineProperties(root, {
+            host: { get() { return host; } },
+            root: { get() { return host.shadowRoot || host; } },
+            document: { get() { return host.shadowRoot ? host.shadowRoot.ownerDocument : document; } }
+        });
+        cardHosts.push(root);
+    }
+</script>
+<script>
+    const shadowLoadedListeners = [];
+    document.addShadowEventListener = function(callback) {
+        shadowLoadedListeners.push(callback);
+        if (shadowLoadedListeners.length === cardHosts.length) {
+            shadowLoadedListeners.forEach(callback => {
+                callback(cardHosts.shift());
+            });
+        }
+    };
+</script>
 {{ partial "friends/custom" . }}
 {{ $friends := site.GetPage "friends" }}
 {{ $pages := $friends.Resources.ByType "page" }}
@@ -35,6 +59,10 @@
                     if (onloadElement.src) script.src = onloadElement.src;
                     if (onloadElement.integrity) script.integrity = onloadElement.integrity;
                     if (onloadElement.crossOrigin) script.crossOrigin = onloadElement.crossOrigin;
+                    if (onloadElement.type) script.type = onloadElement.type;
+                    if (onloadElement.defer) script.defer = true;
+                    if (onloadElement.async) script.async = true;
+                    
                     template.parentElement.appendChild(script);
                 });
             });

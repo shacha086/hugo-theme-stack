@@ -30,8 +30,11 @@
             {{ end }}
         </div>
     </div>
-    <div class="card-content">
+    <div class="card-content shadow-host">
         {{ if .Page.Content }}
+        <script>
+            registerShadow();
+        </script>
         <template class="card-template" shadowrootmode="open" shadowroot="open">
             {{ .Page.Content | safeHTML }}
         </template>
