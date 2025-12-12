@@ -1,28 +1,28 @@
-<div class="card">
+<div class="card" id="card-{{ .Index }}">
     <div class="card-main">
         <div class="card-image card-left">
-            <a href="{{ .Params.href }}">
-                <img src="{{ .Params.avatar }}" alt="{{ .Params.name }}" loading="lazy" />
+            <a href="{{ .Page.Params.href }}">
+                <img src="{{ .Page.Params.avatar }}" alt="{{ .Page.Params.name }}" loading="lazy" />
             </a>
             {{ if .Params.emoji }}
             <div class="emoji">{{ .Params.emoji }}</div>
             {{ end }}
         </div>
         <h3 class="card-title card-left">
-            <a href="{{ .Params.href }}">{{ .Params.name }}</a>
+            <a href="{{ .Page.Params.href }}">{{ .Page.Params.name }}</a>
         </h3>
-        {{ if .Params.tags }}
+        {{ if .Page.Params.tags }}
         <div class="card-tags card-left">
-            {{ range .Params.tags }}
+            {{ range .Page.Params.tags }}
             <span>{{ . }}</span>
             {{ end }}
         </div>
         {{ end }}
-        {{ if .Params.info }}
-        <p class="card-description card-right">{{ .Params.info }}</p>
+        {{ if .Page.Params.info }}
+        <p class="card-description card-right">{{ .Page.Params.info }}</p>
         {{ end }}
         <div class="card-action card-right last-row align-end">
-            {{ if .Content }}
+            {{ if .Page.Content }}
             <a class="action-more" onclick="this.closest('.card').classList.toggle('expanded')">
                 <span class="open">{{ T "friends.open" }}</span>
                 <span class="close">{{ T "friends.close" }}</span>
@@ -32,12 +32,10 @@
     </div>
     <div class="card-content shadow-host">
         {{ if .Page.Content }}
-        <script>
-            registerShadow();
-        </script>
-        <template class="card-template" shadowrootmode="open" shadowroot="open">
-            {{ .Page.Content | safeHTML }}
-        </template>
+            <template class="card-template" shadowrootmode="open" shadowroot="open">
+                {{ $replaceBy := printf "document.addShadowEventListener(%d," .Index }}
+                {{ replace .Page.Content "document.addShadowEventListener(" $replaceBy | safeHTML }}
+            </template>
         {{ end }}
     </div>
 </div>

@@ -1,26 +1,20 @@
 {{ define "body-class" }}template-friends{{ end }}
 {{ define "main" }}
 <script>
-    const cardHosts = [];
-    function registerShadow() {
-        const host = document.currentScript.parentElement;
-        const root = {};
-        Object.defineProperties(root, {
-            host: { get() { return host; } },
-            root: { get() { return host.shadowRoot || host; } },
-            document: { get() { return host.shadowRoot ? host.shadowRoot.ownerDocument : document; } }
-        });
-        cardHosts.push(root);
-    }
-</script>
-<script>
-    const shadowLoadedListeners = [];
-    document.addShadowEventListener = function(callback) {
-        shadowLoadedListeners.push(callback);
-        if (shadowLoadedListeners.length === cardHosts.length) {
-            shadowLoadedListeners.forEach(callback => {
-                callback(cardHosts.shift());
-            });
+    const shadowLoadedListeners = {};
+    document.addShadowEventListener = function(index, callback) {
+        shadowLoadedListeners[index] = callback;
+        const card = document.getElementById(`card-${index}`);
+        const shadowHost = card.querySelector(".shadow-host");
+        card.querySelector(".open").onclick = function() {
+            this.onclick = null;
+            callback(
+                {
+                    host: shadowHost,
+                    root: shadowHost.shadowRoot,
+                    document: shadowHost.shadowRoot ? shadowHost.shadowRoot.ownerDocument : document
+                }
+            );
         }
     };
 </script>
@@ -29,9 +23,9 @@
 {{ $pages := $friends.Resources.ByType "page" }}
 {{ if $pages }}
     <div class="card-wrapper--friends">
-        {{ range $pages }}
-            {{ if not .Params.ignore}}
-            {{ .Render "card" }}
+        {{ range $index, $page := $pages }}
+            {{ if not $page.Params.ignore}}
+            {{ partial "friends/card.html" (dict "Page" $page "Index" $index) }}
             {{ end }}
         {{ end }}
     </div>
