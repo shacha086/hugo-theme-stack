@@ -298,6 +298,7 @@
         padding: 2px 4px;
         border-radius: var(--tag-border-radius);
         font-family: var(--code-font-family);
+        box-decoration-break: clone;
     }
 
     a,
