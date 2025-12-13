@@ -9,6 +9,7 @@ a {
     &.link {
         box-shadow: 0px -2px 0px rgba(var(--link-background-color), var(--link-background-opacity)) inset;
         transition: all 0.3s ease;
+        --icon-link: url("/icons/link.svg");
 
         &:hover {
             box-shadow: 0px calc(-1rem * var(--article-line-height)) 0px rgba(var(--link-background-color), var(--link-background-opacity-hover)) inset;
@@ -16,7 +17,8 @@ a {
 
         &::after {
             content: "";
-            mask: url('/icons/link.svg') no-repeat center;
+            mask: var(--icon-link) no-repeat center;
+            -webkit-mask: var(--icon-link) no-repeat center;
             mask-size: contain;
             background-color: currentColor;
             display: inline-block;
@@ -24,6 +26,11 @@ a {
             height: 2rem;
             position: relative;
             top: 0.4rem;
+            
+            @supports not ((-webkit-mask: url("")) or (mask: url(""))) {
+                background: var(--icon-link) no-repeat center;
+                background-color: unset;
+            }
         }
     }
 }
