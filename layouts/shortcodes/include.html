@@ -1,10 +1,6 @@
 {{ $res := .Page.Resources.Get (.Get 0) }}
 {{ if not $res }}
-  {{ errorf "Shadow shortcode: resource not found: %s" (.Get 0) }}
+  {{ errorf "Include shortcode: resource not found: %s" (.Get 0) }}
 {{ end }}
 
-<div class="shadow-host">
-  <template shadowrootmode="open">
-    {{ $res.Content | safeHTML }}
-  </template>
-</div>
+{{ $res.Content | safeHTML }}
